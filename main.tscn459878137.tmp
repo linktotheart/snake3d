@@ -1,0 +1,66 @@
+[gd_scene load_steps=8 format=3 uid="uid://bh4ga168647j8"]
+
+[ext_resource type="PackedScene" uid="uid://y3m4ybcen002" path="res://Plane/player.tscn" id="1_ig7tw"]
+[ext_resource type="Texture2D" uid="uid://vob2nie7quab" path="res://Background/background.png" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://b78kbmdomq2r4" path="res://Scripts/background.gd" id="2_h2yge"]
+[ext_resource type="Texture2D" uid="uid://bt5ra0a0m653l" path="res://Assets/Ground/groundGrass.png" id="4_1bvp3"]
+[ext_resource type="Script" uid="uid://cmh11yau2o0y6" path="res://spawner.gd" id="5_272bh"]
+[ext_resource type="Script" uid="uid://ohidyrdhuy2f" path="res://Scripts/kill_zone.gd" id="5_lquwl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1bvp3"]
+size = Vector2(734, 73)
+
+[node name="Main" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_ig7tw")]
+position = Vector2(250, 488)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+
+[node name="Background" type="ParallaxBackground" parent="."]
+layer = -10
+script = ExtResource("2_h2yge")
+
+[node name="Ground" type="ParallaxLayer" parent="Background"]
+z_index = 5
+z_as_relative = false
+motion_scale = Vector2(0.3, 1)
+motion_mirroring = Vector2(1610, 0)
+
+[node name="TextureRect" type="TextureRect" parent="Background/Ground"]
+offset_left = 2.0
+offset_top = 934.0
+offset_right = 810.0
+offset_bottom = 1005.0
+scale = Vector2(2, 2)
+texture = ExtResource("4_1bvp3")
+
+[node name="Sky" type="ParallaxLayer" parent="Background"]
+motion_scale = Vector2(0.5, 1)
+motion_mirroring = Vector2(1280, 0)
+
+[node name="TextureRect" type="TextureRect" parent="Background/Sky"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(2.24, 2.24)
+texture = ExtResource("2_0xm2m")
+
+[node name="Spawner" type="Node" parent="."]
+script = ExtResource("5_272bh")
+
+[node name="Timer" type="Timer" parent="Spawner"]
+wait_time = 2.0
+autostart = true
+
+[node name="KillZone" type="Area2D" parent="."]
+script = ExtResource("5_lquwl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
+position = Vector2(366, 1041.5)
+shape = SubResource("RectangleShape2D_1bvp3")
+
+[node name="MountainsGroup" type="Node" parent="."]
+
+[connection signal="timeout" from="Spawner/Timer" to="Spawner" method="_on_timer_timeout"]
+[connection signal="body_entered" from="KillZone" to="KillZone" method="_on_body_entered"]

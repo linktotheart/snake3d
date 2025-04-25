@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://cu0yiydtqf77e"]
+
+[ext_resource type="Script" uid="uid://204kwylai3b5" path="res://Scripts/mountain.gd" id="1_vdhcn"]
+[ext_resource type="Texture2D" uid="uid://bvwa5sf3cofee" path="res://Mountain/rockDown.png" id="2_mq3pj"]
+[ext_resource type="Texture2D" uid="uid://4i8ejc6t5ktp" path="res://Mountain/rock.png" id="3_gtskl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vdhcn"]
+size = Vector2(20, 198)
+
+[node name="Mountain" type="Node2D"]
+top_level = true
+z_index = 1
+script = ExtResource("1_vdhcn")
+
+[node name="top" type="Area2D" parent="."]
+position = Vector2(0, -350)
+scale = Vector2(2, 2)
+
+[node name="Sprite2D" type="Sprite2D" parent="top"]
+texture = ExtResource("2_mq3pj")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="top"]
+polygon = PackedVector2Array(-51.5, -115, 53.5, -116, 14.5, 114.5)
+
+[node name="bottom" type="Area2D" parent="."]
+position = Vector2(0, 300)
+scale = Vector2(2, 2)
+
+[node name="Sprite2D" type="Sprite2D" parent="bottom"]
+texture = ExtResource("3_gtskl")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="bottom"]
+polygon = PackedVector2Array(10.5, -118, -55, 117, 55.5, 118)
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(142, 9)
+scale = Vector2(2.95, 51.3)
+
+[node name="ScoreHit" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScoreHit"]
+position = Vector2(49, -27)
+shape = SubResource("RectangleShape2D_vdhcn")
+
+[connection signal="body_entered" from="top" to="." method="_on_body_entered"]
+[connection signal="body_entered" from="bottom" to="." method="_on_body_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="body_entered" from="ScoreHit" to="." method="_on_score_hit_body_entered"]

@@ -1,0 +1,97 @@
+[gd_scene load_steps=9 format=3 uid="uid://bh4ga168647j8"]
+
+[ext_resource type="PackedScene" uid="uid://y3m4ybcen002" path="res://Plane/player.tscn" id="1_ig7tw"]
+[ext_resource type="Texture2D" uid="uid://vob2nie7quab" path="res://Background/background.png" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://b78kbmdomq2r4" path="res://Scripts/background.gd" id="2_h2yge"]
+[ext_resource type="Texture2D" uid="uid://bt5ra0a0m653l" path="res://Assets/Ground/groundGrass.png" id="4_1bvp3"]
+[ext_resource type="Script" uid="uid://cmh11yau2o0y6" path="res://Scripts/spawner.gd" id="5_272bh"]
+[ext_resource type="Script" uid="uid://ohidyrdhuy2f" path="res://Scripts/kill_zone.gd" id="5_lquwl"]
+[ext_resource type="FontFile" uid="uid://hsynf8cw5ldv" path="res://Assets/Font/kenvector_future.ttf" id="7_6bp64"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_344ge"]
+font = ExtResource("7_6bp64")
+font_size = 84
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_color = Color(0.133196, 0.133196, 0.133196, 0)
+shadow_offset = Vector2(1, 4)
+
+[node name="Main" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+
+[node name="Background" type="ParallaxBackground" parent="."]
+layer = -10
+script = ExtResource("2_h2yge")
+
+[node name="Sky" type="ParallaxLayer" parent="Background"]
+motion_scale = Vector2(0.5, 1)
+motion_mirroring = Vector2(1280, 0)
+
+[node name="TextureRect" type="TextureRect" parent="Background/Sky"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(2.24, 2.24)
+texture = ExtResource("2_0xm2m")
+
+[node name="Spawner" type="Node" parent="."]
+script = ExtResource("5_272bh")
+
+[node name="Timer" type="Timer" parent="Spawner"]
+wait_time = 2.0
+
+[node name="Ground" type="Area2D" parent="."]
+z_index = 10
+script = ExtResource("5_lquwl")
+
+[node name="Sprite2D" type="Sprite2D" parent="Ground"]
+position = Vector2(0, 938)
+scale = Vector2(2, 2)
+texture = ExtResource("4_1bvp3")
+centered = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ground"]
+position = Vector2(0, 1)
+polygon = PackedVector2Array(-7, 1010, 61, 1002, 83, 1020, 184, 1026, 272, 1001, 316, 950, 499, 939, 622, 992, 705, 988, 748, 961, 879, 961, 947, 1023, 1027, 1024, 1074, 1046, 1144, 1049, 1203, 988, 1279, 982, 1316, 943, 1486, 935, 1532, 992, 1613, 1007, 1617, 1073, 2, 1080)
+
+[node name="Sprite2D2" type="Sprite2D" parent="Ground"]
+position = Vector2(1614, 938)
+scale = Vector2(2, 2)
+texture = ExtResource("4_1bvp3")
+centered = false
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Ground"]
+position = Vector2(1612, 5)
+polygon = PackedVector2Array(-7, 1010, 61, 1002, 83, 1020, 184, 1026, 272, 1001, 316, 950, 499, 939, 622, 992, 705, 988, 748, 961, 879, 961, 947, 1023, 1027, 1024, 1074, 1046, 1144, 1049, 1203, 988, 1279, 982, 1316, 943, 1486, 935, 1532, 992, 1613, 1007, 1617, 1073, 2, 1080)
+
+[node name="Node" type="Node" parent="Ground"]
+
+[node name="MountainsGroup" type="Node" parent="."]
+
+[node name="Player" parent="." instance=ExtResource("1_ig7tw")]
+unique_name_in_owner = true
+position = Vector2(250, 488)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 718.0
+offset_bottom = 163.0
+
+[node name="score" type="Label" parent="UI/Control"]
+layout_mode = 0
+offset_right = 718.0
+offset_bottom = 148.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.422907, 0.00182935, 0.967287, 1)
+text = "0"
+label_settings = SubResource("LabelSettings_344ge")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="timeout" from="Spawner/Timer" to="Spawner" method="_on_timer_timeout"]
+[connection signal="body_entered" from="Ground" to="Ground" method="_on_body_entered"]
