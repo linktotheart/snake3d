@@ -12,7 +12,6 @@ const ROCK = preload("res://Mountain/rock.png")
 const ROCK_DOWN = preload("res://Mountain/rockDown.png")
 const ROCK_GRASS = preload("res://Mountain/rockGrass.png")
 const ROCK_GRASS_DOWN = preload("res://Mountain/rockGrassDown.png")
-# Called when the node enters the scene tree for the first time.
 
 signal hit
 signal score_up
@@ -38,7 +37,6 @@ func _ready() -> void:
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 	queue_free()
 
-
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
 		body.stop()
@@ -48,5 +46,5 @@ func _on_body_entered(body: Node2D) -> void:
 func _on_score_hit_body_entered(body: Node2D) -> void:
 	if body is Player:
 		score_up.emit()
-		#score_sound.pitch_scale = randf_range(.75,1.25)
+		score_sound.pitch_scale = randf_range(.75,1.25)
 		score_sound.play()
