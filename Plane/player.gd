@@ -3,6 +3,8 @@ class_name Player
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var timer: Timer = $"../Spawner/Timer"
+@onready var jump_sound: AudioStreamPlayer2D = $JumpSound
+@onready var blast_sound: AudioStreamPlayer2D = $BlastSound
 
 @export var SPEED : float = 10.0
 @export var JUMP : float = -450.0
@@ -28,6 +30,8 @@ func _physics_process(delta: float) -> void:
 			is_game_started = true
 			timer.start()
 		velocity.y = JUMP
+		jump_sound.pitch_scale = randf_range(0.75, 1.25)
+		jump_sound.play()
 	
 	if not is_game_started:
 		return
@@ -42,4 +46,6 @@ func _physics_process(delta: float) -> void:
 func stop():
 	is_game_over = true
 	animated_sprite_2d.play("dead")
+	blast_sound.pitch_scale = randf_range(0.5, 1.5)
+	blast_sound.play()
 	timer.stop()

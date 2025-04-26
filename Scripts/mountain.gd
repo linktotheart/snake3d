@@ -6,6 +6,7 @@ extends Node2D
 @onready var bottom: Area2D = $bottom
 @onready var SPEED: float = 300.0
 @onready var player: Player = %Player
+@onready var score_sound: AudioStreamPlayer2D = $score_sound
 
 const ROCK = preload("res://Mountain/rock.png")
 const ROCK_DOWN = preload("res://Mountain/rockDown.png")
@@ -47,3 +48,5 @@ func _on_body_entered(body: Node2D) -> void:
 func _on_score_hit_body_entered(body: Node2D) -> void:
 	if body is Player:
 		score_up.emit()
+		#score_sound.pitch_scale = randf_range(.75,1.25)
+		score_sound.play()
